@@ -15,11 +15,21 @@
         .mermaid { display: flex; justify-content: center; overflow-x: auto; }
         .mermaid .nodeLabel, .mermaid .edgeLabel, .mermaid .label, .mermaid span, .mermaid text, .mermaid .cluster-label { font-size: 16px !important; }
         .mermaid .nodeLabel p, .mermaid .edgeLabel p { font-size: 16px !important; }
+        .legend-bar { display:flex; justify-content:center; gap:28px; flex-wrap:wrap; margin-bottom:32px; font-size:14px; font-weight:600; }
+        .legend-bar span { display:flex; align-items:center; gap:8px; }
+        .legend-dot { width:16px; height:16px; border-radius:4px; display:inline-block; }
     </style>
 </head>
 <body>
     <h1>IVY-Edge Backend — User Journey</h1>
     <h2>Venture Capital Fund Management Platform</h2>
+
+    <!-- LEGEND -->
+    <div class="legend-bar">
+        <span><span class="legend-dot" style="background:#dbeafe; border:2px solid #3b82f6;"></span> Existing Features</span>
+        <span><span class="legend-dot" style="background:#fed7aa; border:2px solid #ea580c;"></span> 🆕 New Feature — Needs AI / LLM</span>
+        <span><span class="legend-dot" style="background:#bbf7d0; border:2px solid #16a34a;"></span> 🆕 New Feature — No AI Needed</span>
+    </div>
 
     <!-- STEP 1: LOGIN -->
     <div class="section">
@@ -46,7 +56,12 @@ flowchart TB
     DASH --> INVESTOR["💰 Investors<br/>(LP Management)"]
     DASH --> FUND["🏦 Funds<br/>(Fund Management)"]
     DASH --> PORT["🏭 Portfolio<br/>(Company Tracking)"]
-    DASH --> SETTINGS["⚙️ Admin<br/>(RBAC + Access)"]
+    DASH --> Admin["⚙️ Admin<br/>(RBAC + Access)"]
+    DASH --> NEW_AI["🤖 AI Assistant<br/>(Search, Chat, Bots)"]
+    DASH --> NEW_NOTIF["🔔 Notifications<br/>(Alerts Hub)"]
+
+    style NEW_AI fill:#fed7aa,stroke:#ea580c,color:#9a3412
+    style NEW_NOTIF fill:#bbf7d0,stroke:#16a34a,color:#166534
         </div>
     </div>
 
@@ -58,9 +73,10 @@ flowchart TB
     INV["📊 Investment Module"] --> LIST["Deal List<br/>(Filter, Sort, Search, Pagination)"]
     INV --> CREATE["Create Deal"]
     INV --> IMPORT["Bulk Import<br/>(Excel Upload)"]
-    
     INV --> ANALYTICS["Dashboard Analytics"]
     INV --> ADVANCE["Advance Stage Deals<br/>(Tranches, DD Vendors)"]
+    INV --> NEW_GANTT["🆕 Gantt Chart<br/>(Pipeline timeline per deal)"]
+    INV --> NEW_SCORING["🆕🤖 Auto Deal Scoring<br/>(LinkedIn + Tracxn + DB → AI Score)"]
 
     LIST --> DETAIL["Deal Detail Page"]
 
@@ -76,11 +92,31 @@ flowchart TB
     CREATE --> TRACXN["Tracxn Enrichment<br/>(Fetch company data)"]
 
     STATUS --> PIPELINE
+    NOTES --> NEW_AUTONOTES["🆕 Auto Save Notes<br/>(from Meetings via Fireflies)"]
+    DOCUMENTS --> NEW_DOCGEN["🆕🤖 Document Generation<br/>(Term Sheets, Memos via AI)"]
+    DOCUMENTS --> NEW_SEARCH["🆕🤖 AI Search &amp; Chat<br/>(Ask questions on deal docs)"]
 
     subgraph PIPELINE["Deal Pipeline Stages"]
         direction LR
         S1["Outreach"] --> S2["To Be Processed"] --> S3["Partners<br/>Approval"] --> S4["Term Sheet<br/>Issue"] --> S5["TS<br/>Signed"] --> S6["DD / SHA<br/>Nego"] --> S7["CP<br/>Completion"] --> S8["Fund<br/>Disbursed"]
     end
+
+    PIPELINE --> NEW_REMINDERS["🆕 Stage-Based Reminders<br/>(Different cadence per stage)"]
+    PIPELINE --> NEW_PASS_ALERT["🆕 Pass/Track Fundraising Alert<br/>(If deal in Pass/Track is raising → alert)"]
+    PIPELINE --> NEW_DEAL_ALERT["🆕 New Deal Alerts<br/>(Notify team on deal creation)"]
+    PIPELINE --> NEW_DELAY_ALERT["🆕 Partner Alerts on Delays<br/>(Overdue next_action_date → alert)"]
+    PIPELINE --> NEW_REPORT["🆕🤖 Auto Report Generation<br/>(Pipeline reports via AI)"]
+
+    style NEW_GANTT fill:#bbf7d0,stroke:#16a34a,color:#166534
+    style NEW_SCORING fill:#fed7aa,stroke:#ea580c,color:#9a3412
+    style NEW_AUTONOTES fill:#bbf7d0,stroke:#16a34a,color:#166534
+    style NEW_DOCGEN fill:#fed7aa,stroke:#ea580c,color:#9a3412
+    style NEW_SEARCH fill:#fed7aa,stroke:#ea580c,color:#9a3412
+    style NEW_REMINDERS fill:#bbf7d0,stroke:#16a34a,color:#166534
+    style NEW_PASS_ALERT fill:#bbf7d0,stroke:#16a34a,color:#166534
+    style NEW_DEAL_ALERT fill:#bbf7d0,stroke:#16a34a,color:#166534
+    style NEW_DELAY_ALERT fill:#bbf7d0,stroke:#16a34a,color:#166534
+    style NEW_REPORT fill:#fed7aa,stroke:#ea580c,color:#9a3412
         </div>
     </div>
 
@@ -105,6 +141,20 @@ flowchart TB
 
     INV_FUNDS --> TXN["Fund Transactions<br/>(Drawdowns, Distributions,<br/>Returns — CRUD)"]
     INV_FUNDS --> SUMMARY["Portfolio Summary<br/>(Per fund performance)"]
+
+    CREATE --> NEW_INV_ALERT["🆕 New Investor Alerts<br/>(Notify partners on creation)"]
+    TXN --> NEW_DD_ALERT["🆕 Drawdown Alerts<br/>(Called but not received → alert)"]
+    TXN --> NEW_DD_REM["🆕 Drawdown Reminders<br/>(Upcoming drawdown calls)"]
+    NOTES --> NEW_AUTONOTES_I["🆕 Auto Save Notes<br/>(from Meetings via Fireflies)"]
+    DOCUMENTS --> NEW_SEARCH_I["🆕🤖 AI Search &amp; Chat<br/>(Ask questions on investor docs)"]
+    INV_FUNDS --> NEW_REPORT_I["🆕🤖 Auto Report Generation<br/>(LP quarterly reports via AI)"]
+
+    style NEW_INV_ALERT fill:#bbf7d0,stroke:#16a34a,color:#166534
+    style NEW_DD_ALERT fill:#bbf7d0,stroke:#16a34a,color:#166534
+    style NEW_DD_REM fill:#bbf7d0,stroke:#16a34a,color:#166534
+    style NEW_AUTONOTES_I fill:#bbf7d0,stroke:#16a34a,color:#166534
+    style NEW_SEARCH_I fill:#fed7aa,stroke:#ea580c,color:#9a3412
+    style NEW_REPORT_I fill:#fed7aa,stroke:#ea580c,color:#9a3412
         </div>
     </div>
 
@@ -135,6 +185,7 @@ flowchart TB
     MOD["🏭 Portfolio Module"] --> LIST["Portfolio List<br/>(Filter, Sort, Search, Pagination)"]
     MOD --> CREATE["Create Portfolio Company"]
     MOD --> ANALYTICS["Dashboard Analytics"]
+    MOD --> NEW_RATING["🆕🤖 Auto Portfolio Ratings<br/>(MIS + Financials + Compliance → AI Score)"]
 
     LIST --> DETAIL["Portfolio Detail Page"]
 
@@ -149,9 +200,37 @@ flowchart TB
     REPORTS --> MIS["MIS Reports<br/>(CRUD + Bulk Import)"]
     REPORTS --> FINANCIALS["Financials<br/>(Dynamic fields +<br/>Bulk Import + Template)"]
 
+    MIS --> NEW_MIS_COMP["🆕 MIS vs AOP / Business Plan<br/>(Actuals vs Budgets comparison)"]
+    MIS --> NEW_MIS_ALERT["🆕 MIS Submission Alerts<br/>(Due / submitted notifications)"]
+    FINANCIALS --> NEW_SECTOR["🆕 Sector Goals &amp; Metrics Import<br/>(Excel: sector-specific KPIs)"]
+
     GOVERNANCE --> CS["CS Conditions<br/>(Track compliance)"]
     GOVERNANCE --> BOARD["Board Meetings<br/>(Schedule + Minutes)"]
     GOVERNANCE --> CAP["Cap Table<br/>(Ownership structure +<br/>Bulk Import + Template)"]
+
+    CS --> NEW_CS_REM["🆕 CS Condition Reminders<br/>(Deadline alerts for compliance)"]
+    CS --> NEW_COMP_BOT["🆕🤖 Compliance AI Bot<br/>(Risk identification + recommendations)"]
+    BOARD --> NEW_BOARD_REM["🆕 Board Meeting Reminders<br/>(Upcoming / missed alerts)"]
+    BOARD --> NEW_ACTION_ALERT["🆕 Action Item Alerts<br/>(Pending items → notify partners)"]
+    NOTES --> NEW_AUTONOTES_P["🆕 Auto Save Notes<br/>(from Meetings via Fireflies)"]
+    DOCUMENTS --> NEW_SEARCH_P["🆕🤖 AI Search &amp; Chat<br/>(Ask questions on portfolio docs)"]
+    DOCUMENTS --> NEW_DOCGEN_P["🆕🤖 Document Generation<br/>(Reports, memos via AI)"]
+    MOD --> NEW_REPORT_P["🆕🤖 Auto Report Generation<br/>(Fund performance, LP reports)"]
+    MOD --> NEW_RED_ALERT["🆕 Red Portfolio Alerts<br/>(observer_rag = red → notify partners)"]
+
+    style NEW_RATING fill:#fed7aa,stroke:#ea580c,color:#9a3412
+    style NEW_MIS_COMP fill:#bbf7d0,stroke:#16a34a,color:#166534
+    style NEW_MIS_ALERT fill:#bbf7d0,stroke:#16a34a,color:#166534
+    style NEW_SECTOR fill:#bbf7d0,stroke:#16a34a,color:#166534
+    style NEW_CS_REM fill:#bbf7d0,stroke:#16a34a,color:#166534
+    style NEW_COMP_BOT fill:#fed7aa,stroke:#ea580c,color:#9a3412
+    style NEW_BOARD_REM fill:#bbf7d0,stroke:#16a34a,color:#166534
+    style NEW_ACTION_ALERT fill:#bbf7d0,stroke:#16a34a,color:#166534
+    style NEW_AUTONOTES_P fill:#bbf7d0,stroke:#16a34a,color:#166534
+    style NEW_SEARCH_P fill:#fed7aa,stroke:#ea580c,color:#9a3412
+    style NEW_DOCGEN_P fill:#fed7aa,stroke:#ea580c,color:#9a3412
+    style NEW_REPORT_P fill:#fed7aa,stroke:#ea580c,color:#9a3412
+    style NEW_RED_ALERT fill:#bbf7d0,stroke:#16a34a,color:#166534
         </div>
     </div>
 
@@ -160,7 +239,7 @@ flowchart TB
         <h3>Step 3E — Admin (RBAC & Access Control)</h3>
         <div class="mermaid">
 flowchart TB
-    MOD["⚙️ Settings"] --> ROLES["Roles Management"]
+    MOD["⚙️ Admin"] --> ROLES["Roles Management"]
     MOD --> ACCESS["Access Control"]
     MOD --> PROFILE["User Profile"]
 
@@ -180,7 +259,7 @@ flowchart TB
     </div>
 
 
-    <!-- STEP 5: THIRD PARTY INTEGRATIONS -->
+    <!-- STEP 4: THIRD PARTY INTEGRATIONS -->
     <div class="section">
         <h3>Step 4 — Third-Party Integrations</h3>
         <div class="mermaid">
@@ -188,16 +267,28 @@ flowchart LR
     subgraph TRACXN["🔍 Tracxn"]
         T1["Fetch company data<br/>(funding, team, industry)"]
         T2["Lookup company domain"]
+        T3["🆕 Fundraising status check<br/>(for Pass/Track deals)"]
     end
 
     subgraph FIREFLIES["🎙️ Fireflies.ai"]
         F1["Fetch meeting transcripts<br/>via GraphQL API"]
         F2["Auto-create notes<br/>from meetings"]
+        F3["🆕 Full auto-sync<br/>(Celery scheduled +<br/>Portfolio notes sync)"]
     end
 
     subgraph GMAIL["✉️ Gmail API"]
         G1["OAuth login"]
         G2["Sync emails by label<br/>for Deals / Investors / Portfolio"]
+        G3["🆕 Full Inbox<br/>(List, Read, Compose, Reply)"]
+    end
+
+    subgraph GCAL["🆕 📅 Google Calendar"]
+        GC1["🆕 View events &amp;<br/>Create meetings"]
+        GC2["🆕 Sync with<br/>board meetings"]
+    end
+
+    subgraph LINKEDIN["🆕 🔗 LinkedIn API"]
+        L1["🆕 Fetch founder profiles<br/>(for Auto Deal Scoring)"]
     end
 
     subgraph ZOHO["📋 Zoho"]
@@ -213,6 +304,14 @@ flowchart LR
     subgraph CELERY["⏰ Celery + Redis"]
         C1["Bulk import processing"]
         C2["Exchange rate auto-update"]
+        C3["🆕 Reminder &amp; Alert tasks<br/>(Stage, Drawdown, CS,<br/>Board, Pass/Track)"]
+    end
+
+    subgraph AI_LLM["🆕 🤖 AI / LLM — Groq"]
+        AI1["🆕 RAG: Doc search &amp; chat"]
+        AI2["🆕 Deal scoring analysis"]
+        AI3["🆕 Compliance &amp; research bots"]
+        AI4["🆕 Document &amp; report generation"]
     end
 
     T1 -->|"used by"| DEALS["Investment Module"]
@@ -224,6 +323,21 @@ flowchart LR
     A3 -->|"used by"| DEALS
     C1 -->|"used by"| ALL
     C2 -->|"used by"| FUNDS["Funds Module"]
+    L1 -->|"used by"| DEALS
+    AI1 -->|"used by"| ALL
+    GC2 -->|"used by"| PORT["Portfolio Module"]
+
+    style T3 fill:#bbf7d0,stroke:#16a34a,color:#166534
+    style F3 fill:#bbf7d0,stroke:#16a34a,color:#166534
+    style G3 fill:#bbf7d0,stroke:#16a34a,color:#166534
+    style GC1 fill:#bbf7d0,stroke:#16a34a,color:#166534
+    style GC2 fill:#bbf7d0,stroke:#16a34a,color:#166534
+    style L1 fill:#bbf7d0,stroke:#16a34a,color:#166534
+    style C3 fill:#bbf7d0,stroke:#16a34a,color:#166534
+    style AI1 fill:#fed7aa,stroke:#ea580c,color:#9a3412
+    style AI2 fill:#fed7aa,stroke:#ea580c,color:#9a3412
+    style AI3 fill:#fed7aa,stroke:#ea580c,color:#9a3412
+    style AI4 fill:#fed7aa,stroke:#ea580c,color:#9a3412
         </div>
     </div>
 
